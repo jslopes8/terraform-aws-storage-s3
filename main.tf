@@ -1,4 +1,3 @@
-# S3 Storage to terraform remote state
 resource "aws_s3_bucket" "main" {
     count   = var.create_bucket ? 1 : 0
 
