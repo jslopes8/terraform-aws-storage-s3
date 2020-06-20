@@ -11,6 +11,7 @@ ACLs: permitem o gerenciamento do acesso aos buckets e objetos (este item é pad
 - `Restrict Public Buckets`: restrinja o acesso a um bucket com uma política pública apenas para serviços da AWS e usuários autorizados na conta do proprietário do bucket. 
 
 ## Usage
+```hcl
 module "s3_bucket_security" {
     source  = "git@github.com:Terraform-AWS/terraform-aws-services-s3.git?ref=v1.0"
 
@@ -41,7 +42,7 @@ module "s3_bucket_security" {
         Enviroment  = "Homolog"
     }
 }
-
+```
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Variables Inputs
