@@ -1,6 +1,71 @@
 # Terraform module for create AWS S3 Bucket
 Provides a S3 bucket resource.
 
+The code will provide the following resources
+* [S3 Bucket](https://www.terraform.io/docs/providers/aws/r/s3_bucket.html)
+* [S3 Account Public Access Block](https://www.terraform.io/docs/providers/aws/r/s3_account_public_access_block.html)
+
+
+## Usage
+```hcl
+module "s3_bucket_security" {
+    source  = "git@github.com:Terraform-AWS/terraform-aws-services-s3.git?ref=v1.0"
+
+    bucket          = "s3-bucket-name"
+    acl             = "private"
+    region          = "us-east-1"
+
+    server_side_encryption_configuration    = {
+        rule  = {
+            apply_server_side_encryption_by_default = {
+                sse_algorithm = "AES256"
+            }
+        }
+    }
+    versioning = {
+        enabled = "true"
+    }
+    block_public_access = [
+        {
+            block_public_acls       = "true"
+            block_public_policy     = "true"
+            ignore_public_acls      = "true"
+            restrict_public_buckets = "true"
+        }
+    ]
+
+    default_tags = {
+        Enviroment  = "Homolog"
+    }
+}
+```
+
+## Requirements
+
+| Name | Version |
+| ---- | ------- |
+| aws | ~> 2.67 |
+| terraform | 0.12 |
+
+
+
+
+
+<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+## Variables Inputs
+| Name | Description | Required | Type | Default |
+| ---- | ----------- | -------- | ---- | ------- |
+| bucket | The name bucket to created. | `yes` | `string` | ` ` |
+| bucket_prefix | Creates a unique bucket name beginning with the specified prefix. Conflicts with bucket. | `no` | `string` | ` ` |
+| acl | The canned ACL to apply. Defaults to "private". | `no` | `string` | `private` |
+| force_destroy | A boolean that indicates all objects (including any locked objects) should be deleted from the bucket so that the bucket can be destroyed without error. These objects are not recoverable. | `no` | `bool` | `false` |
+| acceleration_status | Sets the accelerate configuration of an existing bucket. Can be Enabled or Suspended. | `no` | `string` | ` ` |
+| region | If specified, the AWS region this bucket should reside in. Otherwise, the region used by the callee. | `yes` | `string` | ` ` |
+| default_tags | A map of tags to assign to the bucket. | `no` | `map(string)` | `{}` |
+| lifecycle_rule | A configuration of object lifecycle management. | `no` | `any` | `[ ]` |
+| server_side_encryption_configuration | Amazon S3 default encryption provides a way to set the default encryption behavior for an S3 bucket. | `no` | `any` | `{ }` |
+| versioning | A state of versioning | `no` | `any` | `{ }` |
+| block_public_access | S3 Block Public Access provides four settings for access points, buckets, and accounts to help you manage public access to Amazon S3 resources. | `no` | `map` | `[ ]` | 
 
 The `versioning` block have the following attributes;
 
@@ -44,56 +109,6 @@ The `block_public_access` block have the following attributes;
 - `block_public_policy`: reject calls to the PUT Bucket policy if the specified bucket policy allows public access.
 - `restrict_public_buckets`: restrict access to a bucket with a public policy only for AWS services and authorized users in the bucket owner's account. 
 
-
-## Usage
-```hcl
-module "s3_bucket_security" {
-    source  = "git@github.com:Terraform-AWS/terraform-aws-services-s3.git?ref=v1.0"
-
-    bucket          = "s3-bucket-name"
-    acl             = "private"
-    region          = "us-east-1"
-
-    server_side_encryption_configuration    = {
-        rule  = {
-            apply_server_side_encryption_by_default = {
-                sse_algorithm = "AES256"
-            }
-        }
-    }
-    versioning = {
-        enabled = "true"
-    }
-    block_public_access = [
-        {
-            block_public_acls       = "true"
-            block_public_policy     = "true"
-            ignore_public_acls      = "true"
-            restrict_public_buckets = "true"
-        }
-    ]
-
-    default_tags = {
-        Enviroment  = "Homolog"
-    }
-}
-```
-
-<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
-## Variables Inputs
-| Name | Description | Required | Type | Default |
-| ---- | ----------- | -------- | ---- | ------- |
-| bucket | The name bucket to created. | `yes` | `string` | ` ` |
-| bucket_prefix | Creates a unique bucket name beginning with the specified prefix. Conflicts with bucket. | `no` | `string` | ` ` |
-| acl | The canned ACL to apply. Defaults to "private". | `no` | `string` | `private` |
-| force_destroy | A boolean that indicates all objects (including any locked objects) should be deleted from the bucket so that the bucket can be destroyed without error. These objects are not recoverable. | `no` | `bool` | `false` |
-| acceleration_status | Sets the accelerate configuration of an existing bucket. Can be Enabled or Suspended. | `no` | `string` | ` ` |
-| region | If specified, the AWS region this bucket should reside in. Otherwise, the region used by the callee. | `yes` | `string` | ` ` |
-| default_tags | A map of tags to assign to the bucket. | `no` | `map(string)` | `{}` |
-| lifecycle_rule | A configuration of object lifecycle management. | `no` | `any` | `[ ]` |
-| server_side_encryption_configuration | Amazon S3 default encryption provides a way to set the default encryption behavior for an S3 bucket. | `no` | `any` | `{ }` |
-| versioning | A state of versioning | `no` | `any` | `{ }` |
-| block_public_access | S3 Block Public Access provides four settings for access points, buckets, and accounts to help you manage public access to Amazon S3 resources. | `no` | `map` | `[ ]` | 
 
 ## Variable Outputs
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
