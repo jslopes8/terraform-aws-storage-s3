@@ -16,7 +16,7 @@ resource "aws_s3_bucket" "main" {
         content {
             id                                     = lookup(lifecycle_rule.value, "id", null)
             prefix                                 = lookup(lifecycle_rule.value, "prefix", null)
-            tags                                   = lookup(lifecycle_rule.value, "tags", null)
+            tags                                   = lookup(lifecycle_rule.value, "default_tags", null)
             abort_incomplete_multipart_upload_days = lookup(lifecycle_rule.value, "abort_incomplete_multipart_upload_days", null)
             enabled                                = lifecycle_rule.value.enabled
 

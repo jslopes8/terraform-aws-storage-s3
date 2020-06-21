@@ -1,14 +1,49 @@
-# AWS S3 Bucket Terraform module
+# Terraform module for create AWS S3 Bucket
+Provides a S3 bucket resource.
 
-Este module para S3 segue estratégias de segurança com suporte para os seguintes itens;
 
-- `Encryption`: garante que todos os objetos novos sejam criptografados.
-ACLs: permitem o gerenciamento do acesso aos buckets e objetos (este item é padrão private usando o terraform). 
-- `Versioning`: permitem que você recupere objetos de uma exclusão ou substituição acidental.
-- `Block Public ACLs`: impeça qualquer nova operação de tornar públicos buckets ou objetos por meio de Bucket ou ACLs de objeto. (as políticas e ACLs existentes para buckets e objetos não são modificadas.)
-- `Ignore Public ACLs`: ignora todas as ACLs públicas em um bucket e todos os objetos que ele contém
-- `Block Public Policy`: rejeite chamadas para a política de PUT Bucket se a política de bucket especificada permitir acesso público. (A ativação dessa configuração não afeta as políticas de bucket existentes)
-- `Restrict Public Buckets`: restrinja o acesso a um bucket com uma política pública apenas para serviços da AWS e usuários autorizados na conta do proprietário do bucket. 
+The `versioning` block have the following attributes;
+
+- `enabled`: (Optional) Enable versioning. Once you version-enable a bucket, it can never return to an unversioned state. You can, however, suspend versioning on that bucket.
+- `mfa_delete`: Optional) Enable MFA delete for either Change the versioning state of your bucket or Permanently delete an object version. Default is false.
+
+The `server_side_encryption_configuration` block have the following attributes;
+
+- `rule`: (required) A single object for server-side encryption by default configuration.
+    - `apply_server_side_encryption_by_default`: (required) A single object for setting server-side encryption by default.
+        - `sse_algorithm`: (required) The server-side encryption algorithm to use. Valid values are AES256 and aws:kms.
+        - `kms_master_key_id`: (optional) The AWS KMS master key ID used for the SSE-KMS encryption. This can only be used when you set the value of sse_algorithm as aws:kms. The default aws/s3.
+
+The `lifecycle_rule` block have the following attributes;
+
+- `id`: Unique identifier for the rule.
+- `default_tags`: Specifies object tags key and value.
+- `enabled`: Specifies lifecycle rule status.
+- `abort_incomplete_multipart_upload_days`: Specifies the number of days after initiating a multipart upload when the multipart upload must be completed.
+
+    -  `expiration`: Specifies a period in the object's expire
+        - `date`: Specifies the date after which you want the corresponding action to take effect.
+        - `days`: Specifies the number of days after object creation when the specific rule action takes effect.
+        - `expired_object_delete_marker`: On a versioned bucket (versioning-enabled or versioning-suspended bucket), you can add this element in the lifecycle configuration to direct Amazon S3 to delete expired object delete markers.
+
+    - `transition`: Specifies a period in the object's transitions
+        - `date`: Specifies the date after which you want the corresponding action to take effect.
+        - `days`: Specifies the number of days after object creation when the specific rule action takes effect.
+        - `storage_class`: (Required) Specifies the Amazon S3 storage class to which you want the object to transition. Can be ONEZONE_IA, STANDARD_IA, INTELLIGENT_TIERING, GLACIER, or DEEP_ARCHIVE.
+
+    - `noncurrent_version_expiration`: Specifies when noncurrent object versions expire
+        - `days`: (Required) Specifies the number of days noncurrent object versions expire.
+    - `noncurrent_version_transition`: Specifies when noncurrent object versions transitions
+        - `days`: (Required) Specifies the number of days noncurrent object versions transition.
+        - `storage_class`:  (Required) Specifies the Amazon S3 storage class to which you want the noncurrent object versions to transition. Can be ONEZONE_IA, STANDARD_IA, INTELLIGENT_TIERING, GLACIER, or DEEP_ARCHIVE.
+
+The `block_public_access` block have the following attributes;
+
+- `block_public_acls`: prevent any new operation from making buckets or objects public through Bucket or object ACLs.
+- `ignore_public_acls`: ignore all public ACLs in a bucket and all objects it contains
+- `block_public_policy`: reject calls to the PUT Bucket policy if the specified bucket policy allows public access.
+- `restrict_public_buckets`: restrict access to a bucket with a public policy only for AWS services and authorized users in the bucket owner's account. 
+
 
 ## Usage
 ```hcl
