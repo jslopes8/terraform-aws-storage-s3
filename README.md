@@ -5,15 +5,33 @@ The code will provide the following resources
 * [S3 Bucket](https://www.terraform.io/docs/providers/aws/r/s3_bucket.html)
 * [S3 Account Public Access Block](https://www.terraform.io/docs/providers/aws/r/s3_account_public_access_block.html)
 
+This module for creating of the s3 bucket have support for following configuration
+
+- `versioning`
+-  `server_side_encryption_configuration`
+- `lifecycle_rule`
+- `block_public_access`
+
 
 ## Usage
+
+Example of the use: Criating an S3 Bucket
 ```hcl
-module "s3_bucket_security" {
+module "s3_bucket" {
     source  = "git@github.com:Terraform-AWS/terraform-aws-services-s3.git?ref=v1.0"
 
     bucket          = "s3-bucket-name"
     acl             = "private"
     region          = "us-east-1"
+
+}
+```
+Example of the use: Criating an S3 Bucket with encryption configuration
+```hcl
+module "s3_bucket" {
+    source  = "git@github.com:Terraform-AWS/terraform-aws-services-s3.git?ref=v1.0"
+
+...
 
     server_side_encryption_configuration    = {
         rule  = {
@@ -22,20 +40,21 @@ module "s3_bucket_security" {
             }
         }
     }
-    versioning = {
-        enabled = "true"
-    }
-    block_public_access = [
-        {
-            block_public_acls       = "true"
-            block_public_policy     = "true"
-            ignore_public_acls      = "true"
-            restrict_public_buckets = "true"
-        }
-    ]
+}
+```
+Example of the use: Criating an S3 Bucket with encryption configuration
+```hcl
+module "s3_bucket" {
+    source  = "git@github.com:Terraform-AWS/terraform-aws-services-s3.git?ref=v1.0"
 
-    default_tags = {
-        Enviroment  = "Homolog"
+...
+
+    server_side_encryption_configuration    = {
+        rule  = {
+            apply_server_side_encryption_by_default = {
+                sse_algorithm = "AES256"
+            }
+        }
     }
 }
 ```
@@ -46,8 +65,6 @@ module "s3_bucket_security" {
 | ---- | ------- |
 | aws | ~> 2.67 |
 | terraform | 0.12 |
-
-
 
 
 
@@ -67,6 +84,7 @@ module "s3_bucket_security" {
 | versioning | A state of versioning | `no` | `any` | `{ }` |
 | block_public_access | S3 Block Public Access provides four settings for access points, buckets, and accounts to help you manage public access to Amazon S3 resources. | `no` | `map` | `[ ]` | 
 
+## Reference for of the attributes
 The `versioning` block have the following attributes;
 
 - `enabled`: (Optional) Enable versioning. Once you version-enable a bucket, it can never return to an unversioned state. You can, however, suspend versioning on that bucket.
