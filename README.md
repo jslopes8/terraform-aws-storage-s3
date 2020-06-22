@@ -66,8 +66,6 @@ module "s3_bucket" {
 | aws | ~> 2.67 |
 | terraform | 0.12 |
 
-
-
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Variables Inputs
 | Name | Description | Required | Type | Default |
@@ -126,7 +124,6 @@ The `block_public_access` block have the following attributes;
 - `ignore_public_acls`: ignore all public ACLs in a bucket and all objects it contains
 - `block_public_policy`: reject calls to the PUT Bucket policy if the specified bucket policy allows public access.
 - `restrict_public_buckets`: restrict access to a bucket with a public policy only for AWS services and authorized users in the bucket owner's account. 
-
 
 ## Variable Outputs
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
