@@ -2,6 +2,10 @@ variable "create_bucket" {
     type    = bool
     default = true
 }
+variable "bucket_policy" {
+    type    = any
+    default = []
+}
 variable "bucket" {
     type    = string
     default = null

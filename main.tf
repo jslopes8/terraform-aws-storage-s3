@@ -1,3 +1,43 @@
+resource "aws_s3_bucket_policy" "main" {    
+    count   = var.create_bucket ? length(var.bucket_policy) : 0
+
+    depends_on = [ aws_s3_bucket.main ]
+
+    bucket  = aws_s3_bucket.main.0.id
+    policy  = data.aws_iam_policy_document.role_policy.json
+}
+data "aws_iam_policy_document" "role_policy" {
+    dynamic "statement" {
+        for_each = var.bucket_policy
+        
+        content {
+            sid         = lookup(statement.value, "sid", null)
+            effect      = lookup(statement.value, "effect", null)
+            actions     = lookup(statement.value, "actions", null)
+            not_actions = lookup(statement.value, "not_actions", null)
+            resources   = lookup(statement.value, "resources", null)
+
+        dynamic "condition" {
+          for_each = length(keys(lookup(statement.value, "condition", {}))) == 0 ? [] : [lookup(statement.value, "condition", {})]
+          content {
+            test      = lookup(condition.value, "test", null)
+            variable  = lookup(condition.value, "variable", null)
+            values    = lookup(condition.value, "values", null)
+            
+          }
+        }
+
+        dynamic "principals" {
+          for_each = length(keys(lookup(statement.value, "principals", {}))) == 0 ? [] : [lookup(statement.value, "principals", {})]
+          content {
+            type        = lookup(principals.value, "type", null)
+            identifiers = lookup(principals.value, "identifiers", null)
+          }
+        }
+      }
+    }
+}
+
 resource "aws_s3_bucket" "main" {
     count   = var.create_bucket ? 1 : 0
 
@@ -79,11 +119,12 @@ resource "aws_s3_bucket" "main" {
     }
 }
 
-resource "aws_s3_bucket_public_access_block" "example" {
+resource "aws_s3_bucket_public_access_block" "main" {
     count   = var.create_bucket ? length(var.block_public_access) : 0 
 
-    bucket = aws_s3_bucket.main.0.id
+    depends_on = [ aws_s3_bucket.main, aws_s3_bucket_policy.main ]
 
+    bucket = aws_s3_bucket.main.0.id
     block_public_acls       = var.block_public_access[count.index]["block_public_acls"]
     block_public_policy     = var.block_public_access[count.index]["block_public_policy"]
     ignore_public_acls      = var.block_public_access[count.index]["ignore_public_acls"]
