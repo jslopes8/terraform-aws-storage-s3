@@ -106,7 +106,7 @@ module "s3_bucket" {
 | server_side_encryption_configuration | Amazon S3 default encryption provides a way to set the default encryption behavior for an S3 bucket. | `no` | `any` | `{ }` |
 | versioning | A state of versioning | `no` | `any` | `{ }` |
 | block_public_access | S3 Block Public Access provides four settings for access points, buckets, and accounts to help you manage public access to Amazon S3 resources. | `no` | `map` | `[ ]` | 
-| bucket_policy | S3 Bucket Policy block providers support for polcicies in JSON | `no` | `map(string)` | `[ ]` | 
+| bucket_policy | S3 Bucket Policy block Attaches a policy to an S3 bucket resource | `no` | `map` | `[ ]` | 
 
 ## Reference for of the attributes
 The `versioning` block have the following attributes;
