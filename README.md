@@ -4,6 +4,7 @@ Provides a S3 bucket resource.
 The code will provide the following resources
 * [S3 Bucket](https://www.terraform.io/docs/providers/aws/r/s3_bucket.html)
 * [S3 Account Public Access Block](https://www.terraform.io/docs/providers/aws/r/s3_account_public_access_block.html)
+* [S3 Bucket Policy](https://www.terraform.io/docs/providers/aws/r/s3_bucket_policy.html)
 
 This module for creating of the s3 bucket have support for following configuration
 
@@ -53,6 +54,31 @@ module "s3_bucket" {
         {
             block_public_acls       = "true"
             block_public_policy     = "true"
+        }
+    ]
+}
+```
+Example of the use: Criating an S3 Bucket with bucket policy configuration
+```hcl
+module "s3_bucket" {
+    source  = "git@github.com:Terraform-AWS/terraform-aws-services-s3.git?ref=v1.0"
+
+...
+
+    bucket_policy   = [
+        {
+            sid     = "AWSCloudTrailAclCheck"
+            effect  = "Allow"
+            actions = [ 
+                "s3:GetBucketAcl",
+            ]
+            principals  = {
+                type = "Service"
+                identifiers = [ "cloudtrail.amazonaws.com" ]
+            }
+            resources   = [
+                "arn:aws:s3:::*"
+            ]
         }
     ]
 }
