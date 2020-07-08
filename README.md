@@ -5,13 +5,16 @@ The code will provide the following resources
 * [S3 Bucket](https://www.terraform.io/docs/providers/aws/r/s3_bucket.html)
 * [S3 Account Public Access Block](https://www.terraform.io/docs/providers/aws/r/s3_account_public_access_block.html)
 * [S3 Bucket Policy](https://www.terraform.io/docs/providers/aws/r/s3_bucket_policy.html)
+* [S3 Bucket Object](https://www.terraform.io/docs/providers/aws/r/s3_bucket_object.html)
 
 This module for creating of the s3 bucket have support for following configuration
 
 - `versioning`
--  `server_side_encryption_configuration`
+- `server_side_encryption_configuration`
 - `lifecycle_rule`
 - `block_public_access`
+- `object_lock_configuration`
+- `bucket_object`
 
 
 ## Usage
@@ -107,6 +110,8 @@ module "s3_bucket" {
 | versioning | A state of versioning | `no` | `any` | `{ }` |
 | block_public_access | S3 Block Public Access provides four settings for access points, buckets, and accounts to help you manage public access to Amazon S3 resources. | `no` | `map` | `[ ]` | 
 | bucket_policy | S3 Bucket Policy block Attaches a policy to an S3 bucket resource | `no` | `map` | `[ ]` | 
+| object_lock_configuration | Indicates whether this bucket has an Object Lock configuration enabled. | `no` | `map` | `{ }` |
+| bucket_object | S3 Object Lock | `no` | `any` | `[ ]` |
 
 ## Reference for of the attributes
 The `versioning` block have the following attributes;
