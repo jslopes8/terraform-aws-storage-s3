@@ -117,6 +117,14 @@ resource "aws_s3_bucket" "main" {
             mfa_delete  = lookup(versioning.value, "mfa_delete", null)
         }
     }
+
+    dynamic "object_lock_configuration" {
+        for_each = length(keys(var.object_lock_configuration)) == 0 ? [] : [var.object_lock_configuration]
+        content {
+            object_lock_enabled = lookup(object_lock_configuration.value, "object_lock_enabled", null)
+            rule                = lookup(object_lock_configuration.value, "rule", null)
+        }
+    }
 }
 
 resource "aws_s3_bucket_public_access_block" "main" {
@@ -129,4 +137,22 @@ resource "aws_s3_bucket_public_access_block" "main" {
     block_public_policy     = var.block_public_access[count.index]["block_public_policy"]
     ignore_public_acls      = var.block_public_access[count.index]["ignore_public_acls"]
     restrict_public_buckets = var.block_public_access[count.index]["restrict_public_buckets"]
+}
+resource "aws_s3_bucket_object" "main" {
+    depends_on = [ aws_s3_bucket.main ]
+
+    count   = var.create ? length(var.bucket_object) : 0
+
+    bucket          = aws_s3_bucket.main.0.id
+    key             = var.bucket_object[count.index]["key"]
+    source          = lookup(var.bucket_object[count.index], "source", null)
+    force_destroy   = lookup(var.bucket_object[count.index], "force_destroy", null)
+
+    server_side_encryption  = lookup(var.bucket_object[count.index], "server_side_encryption", null)
+    storage_class           = lookup(var.bucket_object[count.index], "storage_class", null)
+
+    object_lock_legal_hold_status   = lookup(var.bucket_object[count.index], "legal_hold", null)
+    object_lock_mode                = lookup(var.bucket_object[count.index], "retention_mode", null)
+    object_lock_retain_until_date   = lookup(var.bucket_object[count.index], "retain_until", null)
+
 }
