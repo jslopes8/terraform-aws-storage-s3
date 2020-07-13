@@ -124,10 +124,10 @@ resource "aws_s3_bucket" "main" {
             object_lock_enabled = lookup(object_lock_configuration.value, "object_lock_enabled", null)
             
             dynamic "rule" {
-                for_each = length(keys(lookup(object_lock_configuration.value, "rule", {}))) == 0 ? [] : [lookup(rule.object_lock_configuration, "rule", {})]
+                for_each = length(keys(lookup(object_lock_configuration.value, "rule", {}))) == 0 ? [] : [lookup(object_lock_configuration.value, "rule", {})]
                 content {
                     dynamic "default_retention" {
-                        for_each = length(keys(lookup(rule.default_retention, "default_retention", {}))) == 0 ? [] : [lookup(rule.default_retention, "default_retention", {})]
+                        for_each = length(keys(lookup(rule.value, "default_retention", {}))) == 0 ? [] : [lookup(rule.value, "default_retention", {})]
                         content {
                             mode    = default_retention.value.mode 
                             days    = lookup(default_retention.value, "days", null)
