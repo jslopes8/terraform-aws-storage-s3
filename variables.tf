@@ -54,8 +54,9 @@ variable "default_tags" {
     type    = map(string)
     default = {}
 }
+
 variable "object_lock_configuration" {
-    type    = map(string)
+    type    = any
     default = {}
 }
 variable "bucket_object" {
