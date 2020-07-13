@@ -154,7 +154,7 @@ resource "aws_s3_bucket_public_access_block" "main" {
 resource "aws_s3_bucket_object" "main" {
     depends_on = [ aws_s3_bucket.main ]
 
-    count   = var.create ? length(var.bucket_object) : 0
+    count   = var.create_bucket ? length(var.bucket_object) : 0
 
     bucket          = aws_s3_bucket.main.0.id
     key             = var.bucket_object[count.index]["key"]
