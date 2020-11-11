@@ -22,10 +22,6 @@ variable "force_destroy" {
     type    = bool
     default = false
 }
-variable "region" {
-    type    = string
-    default = null
-}
 variable "request_payer" {
     type    = string
     default = null

@@ -46,7 +46,6 @@ resource "aws_s3_bucket" "main" {
     acl                 = var.acl
     force_destroy       = var.force_destroy
     acceleration_status = var.acceleration_status
-    region              = var.region
     request_payer       = var.request_payer
 
     tags = var.default_tags
