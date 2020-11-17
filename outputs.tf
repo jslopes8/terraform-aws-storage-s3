@@ -7,3 +7,6 @@ output "s3_arn" {
 output "s3_region" {
     value   = aws_s3_bucket.main.*.region
 }
+output "s3_endpoint" {
+    value   = aws_s3_bucket.main.*.bucket_domain_name
+}
