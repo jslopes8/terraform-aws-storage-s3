@@ -59,3 +59,7 @@ variable "bucket_object" {
     type    = any
     default = []
 }
+variable "cors_rule" {
+    type    = any
+    default = []
+}
