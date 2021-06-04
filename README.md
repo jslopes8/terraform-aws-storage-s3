@@ -1,4 +1,4 @@
-# Terraform module for create AWS S3 Bucket
+# Terraform AWS S3 Bucket
 Provides a S3 bucket resource.
 
 The code will provide the following resources
