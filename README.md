@@ -22,16 +22,16 @@ This module for creating of the s3 bucket have support for following configurati
 Example of the use: Criating an S3 Bucket
 ```hcl
 module "s3_bucket" {
-    source  = "git@github.com:Terraform-AWS/terraform-aws-services-s3.git?ref=v1.0"
-
-    bucket_name = "s3-bucket-name"
-    bucket_acl  = "private"
+  source  = "git@github.com:Terraform-AWS/terraform-aws-services-s3.git?ref=v1.0"
+	
+	bucket_name = "s3-bucket-name"
+	bucket_acl  = "private"
 }
 ```
 Example of the use: Criating an S3 Bucket with encryption configuration
 ```bash
 module "s3_bucket" {
-  source  = "git@github.com:Terraform-AWS/terraform-aws-services-s3.git?ref=v1.0"
+  source  = "git@github.com:Terraform-AWS/terraform-aws-services-s3.git?ref=v3.5"
 
 	# configuraçao geral
   bucket_name = "tf-jslopes-s3-test"
@@ -48,8 +48,8 @@ module "s3_bucket" {
 Example of the use: Criating an S3 Bucket with block public access configuration
 ```bash
 module "s3_bucket" {
-  source  = "git@github.com:Terraform-AWS/terraform-aws-services-s3.git?ref=v1.0"
-
+  source  = "git@github.com:Terraform-AWS/terraform-aws-services-s3.git?ref=v3.5"
+	
 	# configuraçao geral
   bucket_name = "tf-jslopes-s3-test"
   bucket_acl  = "private"
@@ -61,7 +61,7 @@ module "s3_bucket" {
 Example of the use: Criating an S3 Bucket with bucket policy configuration
 ```bash
 module "s3_bucket" {
-  source  = "git@github.com:Terraform-AWS/terraform-aws-services-s3.git?ref=v1.0"
+  source  = "git@github.com:Terraform-AWS/terraform-aws-services-s3.git?ref=v3.5"
 
 	...
 
@@ -72,7 +72,7 @@ module "s3_bucket" {
       actions 		= [  "s3:GetBucketAcl" ]
 			resources   = [ "arn:aws:s3:::*" ]
       principals  = {
-        type 				= "Service"
+        type	= "Service"
         identifiers = [ "cloudtrail.amazonaws.com" ]
       }
     }
