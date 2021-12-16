@@ -22,7 +22,7 @@ This module for creating of the s3 bucket have support for following configurati
 Example of the use: Criating an S3 Bucket
 ```hcl
 module "s3_bucket" {
-  source  = "git@github.com:Terraform-AWS/terraform-aws-services-s3.git?ref=v1.0"
+  source  = "git@github.com:Terraform-AWS/terraform-aws-services-s3.git?ref=v3.5"
 	
   bucket_name = "s3-bucket-name"
   bucket_acl  = "private"
