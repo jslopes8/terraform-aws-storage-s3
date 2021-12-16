@@ -24,66 +24,59 @@ Example of the use: Criating an S3 Bucket
 module "s3_bucket" {
     source  = "git@github.com:Terraform-AWS/terraform-aws-services-s3.git?ref=v1.0"
 
-    bucket          = "s3-bucket-name"
-    acl             = "private"
-    region          = "us-east-1"
-
+    bucket_name = "s3-bucket-name"
+    bucket_acl  = "private"
 }
 ```
 Example of the use: Criating an S3 Bucket with encryption configuration
-```hcl
+```bash
 module "s3_bucket" {
-    source  = "git@github.com:Terraform-AWS/terraform-aws-services-s3.git?ref=v1.0"
+  source  = "git@github.com:Terraform-AWS/terraform-aws-services-s3.git?ref=v1.0"
 
+	# configuraçao geral
+  bucket_name = "tf-jslopes-s3-test"
+  bucket_acl  = "private"
+
+  # default encryption
+  server_side_encryption = true
+  encryption_type_sse_s3 = true
+}
 ...
 
-    server_side_encryption_configuration    = {
-        rule  = {
-            apply_server_side_encryption_by_default = {
-                sse_algorithm = "AES256"
-            }
-        }
-    }
 }
 ```
 Example of the use: Criating an S3 Bucket with block public access configuration
-```hcl
+```bash
 module "s3_bucket" {
-    source  = "git@github.com:Terraform-AWS/terraform-aws-services-s3.git?ref=v1.0"
+  source  = "git@github.com:Terraform-AWS/terraform-aws-services-s3.git?ref=v1.0"
 
-...
+	# configuraçao geral
+  bucket_name = "tf-jslopes-s3-test"
+  bucket_acl  = "private"
 
-    block_public_access = [
-        {
-            block_public_acls       = "true"
-            block_public_policy     = "true"
-        }
-    ]
+	# block public access
+	block_all_public_access  = true
 }
 ```
 Example of the use: Criating an S3 Bucket with bucket policy configuration
-```hcl
+```bash
 module "s3_bucket" {
-    source  = "git@github.com:Terraform-AWS/terraform-aws-services-s3.git?ref=v1.0"
+  source  = "git@github.com:Terraform-AWS/terraform-aws-services-s3.git?ref=v1.0"
 
-...
+	...
 
-    bucket_policy   = [
-        {
-            sid     = "AWSCloudTrailAclCheck"
-            effect  = "Allow"
-            actions = [ 
-                "s3:GetBucketAcl",
-            ]
-            principals  = {
-                type = "Service"
-                identifiers = [ "cloudtrail.amazonaws.com" ]
-            }
-            resources   = [
-                "arn:aws:s3:::*"
-            ]
-        }
-    ]
+  bucket_policy   = [
+    {
+      sid     		= "AWSCloudTrailAclCheck"
+      effect  		= "Allow"
+      actions 		= [  "s3:GetBucketAcl" ]
+			resources   = [ "arn:aws:s3:::*" ]
+      principals  = {
+        type 				= "Service"
+        identifiers = [ "cloudtrail.amazonaws.com" ]
+      }
+    }
+  ]
 }
 ```
 
@@ -98,19 +91,22 @@ module "s3_bucket" {
 ## Variables Inputs
 | Name | Description | Required | Type | Default |
 | ---- | ----------- | -------- | ---- | ------- |
-| bucket | The name bucket to created. | `yes` | `string` | ` ` |
+| bucket_name | The name bucket to created. | `yes` | `string` | ` ` |
 | bucket_prefix | Creates a unique bucket name beginning with the specified prefix. Conflicts with bucket. | `no` | `string` | ` ` |
-| acl | The canned ACL to apply. Defaults to "private". | `no` | `string` | `private` |
+| bucket_acl | The canned ACL to apply. Defaults to "private". | `no` | `string` | `private` |
 | force_destroy | A boolean that indicates all objects (including any locked objects) should be deleted from the bucket so that the bucket can be destroyed without error. These objects are not recoverable. | `no` | `bool` | `false` |
 | acceleration_status | Sets the accelerate configuration of an existing bucket. Can be Enabled or Suspended. | `no` | `string` | ` ` |
-| region | If specified, the AWS region this bucket should reside in. Otherwise, the region used by the callee. | `yes` | `string` | ` ` |
 | default_tags | A map of tags to assign to the bucket. | `no` | `map(string)` | `{}` |
 | lifecycle_rule | A configuration of object lifecycle management. | `no` | `any` | `[ ]` |
-| server_side_encryption_configuration | Amazon S3 default encryption provides a way to set the default encryption behavior for an S3 bucket. | `no` | `any` | `{ }` |
-| versioning | A state of versioning | `no` | `any` | `{ }` |
-| block_public_access | S3 Block Public Access provides four settings for access points, buckets, and accounts to help you manage public access to Amazon S3 resources. | `no` | `map` | `[ ]` | 
+| server_side_encryption | Amazon S3 default encryption provides a way to set the default encryption behavior for an S3 bucket. | `no` | `bool` | `false` |
+| encryption_type_sse_s3 | Amazon S3 encryption type for SS3-S3. | `no` | `bool` | `false` |
+| encryption_type_sse_kms | Amazon S3 encryption type for SS3-KMS. | `no` | `bool` | `false` |
+| kms_master_key_arn | Amazon S3 encryption type for SS3-KMS setting of the ARN KMS. | `no` | `string` | `` |
+| enable_bucket_versioning | A state of versioning | `no` | `bool` | `false` |
+| block_public_access | S3 Block Public Access provides four settings for access points, buckets, and accounts to help you manage public access to Amazon S3 resources. | `no` | `list` | `[ ]` | 
+| block_all_public_access | S3 Block Public Access for all access points. | `no` | `bool` | `true` | 
 | bucket_policy | S3 Bucket Policy block Attaches a policy to an S3 bucket resource | `no` | `map` | `[ ]` | 
-| object_lock_configuration | Indicates whether this bucket has an Object Lock configuration enabled. | `no` | `map` | `{ }` |
+| bucket_object_lock | Indicates whether this bucket has an Object Lock configuration enabled. | `no` | `map` | `{ }` |
 | bucket_object | S3 Object Lock | `no` | `any` | `[ ]` |
 
 ## Reference for of the attributes
