@@ -41,9 +41,6 @@ module "s3_bucket" {
   server_side_encryption = true
   encryption_type_sse_s3 = true
 }
-...
-
-}
 ```
 Example of the use: Criating an S3 Bucket with block public access configuration
 ```bash
@@ -69,10 +66,10 @@ module "s3_bucket" {
 
   bucket_policy   = [
     {
-      sid     		= "AWSCloudTrailAclCheck"
-      effect  		= "Allow"
-      actions 		= [  "s3:GetBucketAcl" ]
-			resources   = [ "arn:aws:s3:::*" ]
+      sid     	= "AWSCloudTrailAclCheck"
+      effect  	= "Allow"
+      actions 	= [  "s3:GetBucketAcl" ]
+      resources   = [ "arn:aws:s3:::*" ]
       principals  = {
         type	= "Service"
         identifiers = [ "cloudtrail.amazonaws.com" ]
