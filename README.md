@@ -24,8 +24,8 @@ Example of the use: Criating an S3 Bucket
 module "s3_bucket" {
   source  = "git@github.com:Terraform-AWS/terraform-aws-services-s3.git?ref=v1.0"
 	
-	bucket_name = "s3-bucket-name"
-	bucket_acl  = "private"
+  bucket_name = "s3-bucket-name"
+  bucket_acl  = "private"
 }
 ```
 Example of the use: Criating an S3 Bucket with encryption configuration
@@ -33,7 +33,7 @@ Example of the use: Criating an S3 Bucket with encryption configuration
 module "s3_bucket" {
   source  = "git@github.com:Terraform-AWS/terraform-aws-services-s3.git?ref=v3.5"
 
-	# configuraçao geral
+  # configuraçao geral
   bucket_name = "tf-jslopes-s3-test"
   bucket_acl  = "private"
 
@@ -50,12 +50,12 @@ Example of the use: Criating an S3 Bucket with block public access configuration
 module "s3_bucket" {
   source  = "git@github.com:Terraform-AWS/terraform-aws-services-s3.git?ref=v3.5"
 	
-	# configuraçao geral
+  # configuraçao geral
   bucket_name = "tf-jslopes-s3-test"
   bucket_acl  = "private"
 
-	# block public access
-	block_all_public_access  = true
+  # block public access
+  block_all_public_access  = true
 }
 ```
 Example of the use: Criating an S3 Bucket with bucket policy configuration
@@ -63,7 +63,9 @@ Example of the use: Criating an S3 Bucket with bucket policy configuration
 module "s3_bucket" {
   source  = "git@github.com:Terraform-AWS/terraform-aws-services-s3.git?ref=v3.5"
 
-	...
+  # configuraçao geral
+  bucket_name = "tf-jslopes-s3-test"
+  bucket_acl  = "private"
 
   bucket_policy   = [
     {
@@ -108,19 +110,6 @@ module "s3_bucket" {
 | bucket_policy | S3 Bucket Policy block Attaches a policy to an S3 bucket resource | `no` | `map` | `[ ]` | 
 | bucket_object_lock | Indicates whether this bucket has an Object Lock configuration enabled. | `no` | `map` | `{ }` |
 | bucket_object | S3 Object Lock | `no` | `any` | `[ ]` |
-
-## Reference for of the attributes
-The `versioning` block have the following attributes;
-
-- `enabled`: (Optional) Enable versioning. Once you version-enable a bucket, it can never return to an unversioned state. You can, however, suspend versioning on that bucket.
-- `mfa_delete`: Optional) Enable MFA delete for either Change the versioning state of your bucket or Permanently delete an object version. Default is false.
-
-The `server_side_encryption_configuration` block have the following attributes;
-
-- `rule`: (required) A single object for server-side encryption by default configuration.
-    - `apply_server_side_encryption_by_default`: (required) A single object for setting server-side encryption by default.
-        - `sse_algorithm`: (required) The server-side encryption algorithm to use. Valid values are AES256 and aws:kms.
-        - `kms_master_key_id`: (optional) The AWS KMS master key ID used for the SSE-KMS encryption. This can only be used when you set the value of sse_algorithm as aws:kms. The default aws/s3.
 
 The `lifecycle_rule` block have the following attributes;
 
